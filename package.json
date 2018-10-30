@@ -1,0 +1,27 @@
+{
+  "name": "ia2018",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "babel-node index.js",
+    "build": "babel . -d dist/ --copy-files",
+    "now-start":"cd dist && node index.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/node": "^7.0.0",
+    "@babel/preset-env": "^7.1.0"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs": "^0.13.3",
+    "@tensorflow/tfjs-node": "^0.1.19",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "jimp": "^0.5.6",
+    "pngjs": "^3.3.3",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
+  }
+}

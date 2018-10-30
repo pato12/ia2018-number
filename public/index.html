@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=400, initial-scale=1.0'>
+  <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+  <title>IA 2018</title>
+  <link rel='stylesheet' href='reset.css'>
+  <link rel='stylesheet' href='estilos.css'>
+</head>
+
+<body>
+  <h1>Predecir Numero Escrito</h1>
+  <canvas id='canvas' width='400' height='400'></canvas>
+
+  <div class="actions">
+    <button id='predecir'>Predecir</button>
+    <button id='limpiar'>Limiar</button>
+  </div>
+
+  <div id="resultados" class="container"></div>
+
+  <script type='text/javascript'>
+    (function() {
+      var canvas = document.getElementById('canvas');
+      var limpiar = document.getElementById('limpiar');
+      var predecir = document.getElementById('predecir');
+      var resultados = document.getElementById('resultados');
+
+      var ctx = canvas.getContext('2d');
+      var w = canvas.width;
+      var h = canvas.height;
+
+      var drawing = false;
+      var prev = { x: 0, y: 0 };
+
+      var lineWidth = 1;
+
+      function startDraw(e) {
+        const point = e.touches ? e.touches[0] : e;
+
+        drawing = true;
+
+        prev.x = point.clientX - canvas.offsetLeft;
+        prev.y = point.clientY - canvas.offsetTop;
+
+        ctx.beginPath();
+        ctx.fillStyle = 'black';
+        ctx.fillRect(prev.x, prev.y, lineWidth, lineWidth);
+        ctx.closePath();
+
+        e.preventDefault();
+      }
+
+      function moveDraw(e) {
+        if (!drawing) return;
+        const point = e.touches ? e.touches[0] : e;
+
+        var x = point.clientX - canvas.offsetLeft;
+        var y = point.clientY - canvas.offsetTop;
+
+        ctx.beginPath();
+        ctx.moveTo(prev.x, prev.y);
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+        ctx.closePath();
+
+        prev.x = x;
+        prev.y = y;
+
+        e.preventDefault();
+      }
+
+      function endDraw(e) {
+        drawing = false;
+      }
+
+      function limpiarCanvas(e) {
+        e.preventDefault();
+
+        ctx.clearRect(0, 0, w, h);
+      }
+
+      function enviarDibujo() {
+        limpiar.disabled = true;
+        predecir.disabled = true;
+
+        fetch('/predecir', {
+          method: 'POST',
+          body: JSON.stringify({ png: canvas.toDataURL() }),
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+        }).then(function(response) {
+          return response.json();
+        }).then(function(response) {
+          var texto = document.createElement('div');
+          var img = document.createElement('img');
+
+          var text = ['<h1>' + 'Predicción: ' + response.data.prediction + '</h1>', '<h2>Output:</h2>'];
+
+          for (var pred of response.data.result) {
+            text.push('<div class="item">Numero ' + pred.n + ': ' + (pred.acc * 100).toFixed(2) + '%' + '</div>');
+          }
+
+          texto.innerHTML = text.join('<br/>');
+          img.src = 'data:image/png;base64,' + response.data.base64;
+
+          resultados.prepend(img);
+          resultados.prepend(texto);
+          resultados.style.display = 'block';
+
+          limpiar.disabled = false;
+          predecir.disabled = false;
+        });
+      }
+
+      canvas.addEventListener('mousemove', moveDraw, false);
+      canvas.addEventListener('mousedown', startDraw, false);
+      canvas.addEventListener('mouseup', endDraw, false);
+      canvas.addEventListener('mouseout', endDraw, false);
+
+      canvas.addEventListener('touchmove', moveDraw, false);
+      canvas.addEventListener('touchstart', startDraw, false);
+      canvas.addEventListener('touchend', endDraw, false);
+      canvas.addEventListener('touchend', endDraw, false);
+
+
+      limpiar.addEventListener('click', limpiarCanvas, false);
+      predecir.addEventListener('click', enviarDibujo, false);
+
+      resultados.style.display = 'none';
+    })();
+  </script>
+
+</body>
+
+</html>

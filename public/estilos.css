@@ -1,0 +1,116 @@
+body {
+  color: #000;
+  background: #eeeeee;
+  font-size: 16px;
+  font-family: 'Open Sans', -apple-system, Arial, Sans-Serif;
+  margin: 0;
+  padding: 0;
+
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-feature-settings: "pnum";
+  font-feature-settings: "pnum";
+  font-variant-numeric: proportional-nums;
+}
+
+h1 {
+  font-size: 25px;
+  display: block;
+  text-align: center;
+  margin: 30px 0;
+}
+
+canvas {
+  width: 400px;
+  height: 400px;
+  background: white;
+  border: solid 1px #000;
+  margin: 0 auto;
+  display: block;
+}
+
+.actions {
+  display: block;
+  width: 400px;
+  margin: 30px auto;
+  text-align: center;
+}
+
+.actions button {
+  border: none;
+  background: #333;
+  color: white;
+  padding: 10px 15px;
+  font-size: 18px;
+  transition: all 300ms;
+}
+
+.actions button:hover, .actions button:active {
+  opacity: 0.7;
+}
+
+.actions button:disabled {
+  opacity: 0.6;
+  background: #ccc;
+}
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+#resultados {
+  background: white;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+#resultados img {
+  display: block;
+  width: 100%;
+  background: white;
+}
+
+#resultados h1 {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+#resultados h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+#resultados .item {
+  display: flex;
+  align-items: center;
+  line-height: 30px;
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+}
+
+#resultados .item .text {
+  flex: 1;
+}
+
+.progress-wrapper {
+  width: 40%;
+  height: 20px;
+  background: #eee;
+  margin-left: 15px;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-wrapper .progress {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  position: absolute;
+  background: rgb(50, 81, 109);
+}
